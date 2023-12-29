@@ -10,36 +10,36 @@
 <body>
     <div class="calculator">
         <div class="screen">
-            <p class="equation">64 + 4</p>
-            <p class="answer">68</p>
+            <div id="display-screen"></div>
+            <div id="active-screen"></div>
         </div>
         <div class="top-row">
-            <button>Clear</button>
-            <button>Delete</button>
+            <button id="clearBtn">Clear</button>
+            <button id="deleteBtn">Delete</button>
         </div>
         <div class="row">
-            <button>9</button>
-            <button>8</button>
-            <button>7</button>
-            <button>/</button>
+            <button data-number>9</button>
+            <button data-number>8</button>
+            <button data-number>7</button>
+            <button data-operator>/</button>
         </div>
         <div class="row">
-            <button>6</button>
-            <button>5</button>
-            <button>4</button>
-            <button>x</button>
+            <button data-number>6</button>
+            <button data-number>5</button>
+            <button data-number>4</button>
+            <button data-operator>x</button>
         </div>
         <div class="row">
-            <button>3</button>
-            <button>2</button>
-            <button>1</button>
-            <button>-</button>
+            <button data-number>3</button>
+            <button data-number>2</button>
+            <button data-number>1</button>
+            <button data-operator>-</button>
         </div>
         <div class="row">
-            <button>0</button>
-            <button>.</button>
-            <button>=</button>
-            <button>+</button>
+            <button data-number>0</button>
+            <button id="pointBtn">.</button>
+            <button id="equalBtn">=</button>
+            <button data-operator>+</button>
         </div>
     </div>
     <div class="footer">
