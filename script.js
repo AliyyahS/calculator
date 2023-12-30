@@ -43,7 +43,9 @@ function handleOperator(operator) {
 
 function updateDisplay() {
     activeScreen.textContent = currentValue
-    displayScreen.textContent = previousValue
+    if (selectedOperator != null) {
+        displayScreen.textContent = `${previousValue} ${selectedOperator} `
+    }
 }
 
 
@@ -97,6 +99,7 @@ operatorBtns.forEach(function(button) {
 })
 
 equalBtn.addEventListener('click', () => {
+    displayScreen.textContent += `${currentValue} =`
     operate(selectedOperator, previousValue, currentValue)
     updateDisplay()
 })
@@ -104,6 +107,7 @@ equalBtn.addEventListener('click', () => {
 clearBtn.addEventListener('click', () => {
     clear()
     updateDisplay()
+    displayScreen.textContent = ''
 })
 
 deleteBtn.addEventListener('click', () => {
