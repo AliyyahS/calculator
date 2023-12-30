@@ -107,6 +107,36 @@ function isInvalid() {
     } else return false
 }
 
+function handleKeyboardInput(e) {
+    if (e.key >= 0 && e.key <= 9) {
+        appendNumber(e.key)
+        updateDisplay()
+    }
+    if (e.key === '=' || e.key === 'Enter') {
+        handleEqual()
+        operate(selectedOperator, previousValue, currentValue)
+        updateDisplay()
+    }
+    if (e.key === 'Backspace') {
+        deleteNumber()
+        updateDisplay()
+    }
+    if (e.key === 'Escape') {
+        clear()
+    }
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+      handleOperator(getOperator(e.key))
+      updateDisplay()
+    }
+  }
+  
+  function getOperator(key) {
+    if (key === '/') return '/'
+    if (key === '*') return 'x'
+    if (key === '-') return '-'
+    if (key === '+') return '+'
+  }
+
 // Event listeners
 
 numberBtns.forEach(function(button) {
@@ -137,3 +167,5 @@ deleteBtn.addEventListener('click', () => {
     deleteNumber()
     updateDisplay()
 })
+
+window.addEventListener('keydown', handleKeyboardInput)
