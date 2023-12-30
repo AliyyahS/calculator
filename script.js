@@ -14,13 +14,14 @@ let currentValue = ''
 let previousValue = ''
 let selectedOperator = undefined
 
+let validity = false
+
 // Functions
 
 function clear() {
     currentValue = ''
     previousValue = ''
     selectedOperator = undefined
-    displayScreen.textContent = ''
 }
 
 function deleteNumber() {
@@ -37,6 +38,7 @@ function appendNumber(number) {
 
 function handleOperator(operator) {
     if (currentValue === '') return
+    if (isInvalid()) return
     if (previousValue !== '') {
         operate(selectedOperator, previousValue, currentValue)
     }
@@ -47,12 +49,17 @@ function handleOperator(operator) {
 
 function handleEqual() {
     if (selectedOperator === undefined) return
+    if (isInvalid()) return
     if (previousValue !== '' && currentValue !== '') {
         displayScreen.textContent += `${currentValue} =`
     }
 }
 
 function updateDisplay() {
+    if(validity) {
+        validity = false
+        return
+    }
     activeScreen.textContent = currentValue
     if (selectedOperator != null) {
         displayScreen.textContent = `${previousValue} ${selectedOperator} `
@@ -61,7 +68,7 @@ function updateDisplay() {
 
 
 function operate(operator, a, b) {
-    if(a === '' || b === '') return
+    if (a === '' || b === '') return
 
     let operation = 0;
     a = Number(a)
@@ -78,10 +85,6 @@ function operate(operator, a, b) {
             operation = a * b
             break
         case '/':
-            if (b === 0) {
-                alert("That's invalid, you melon")
-                return
-            }
             operation = a / b
             break
         default:
@@ -91,6 +94,15 @@ function operate(operator, a, b) {
     currentValue = operation
     previousValue = ''
     selectedOperator = undefined
+}
+
+function isInvalid() {
+    if(selectedOperator === '/' && currentValue === '0') {
+        alert("That's invalid, you melon")
+        currentValue = ''
+        validity = true
+        return true
+    } else return false
 }
 
 // Event listeners
@@ -118,6 +130,7 @@ equalBtn.addEventListener('click', () => {
 clearBtn.addEventListener('click', () => {
     clear()
     updateDisplay()
+    displayScreen.textContent = ''
 })
 
 deleteBtn.addEventListener('click', () => {
