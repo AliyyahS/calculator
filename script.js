@@ -14,7 +14,7 @@ let currentValue = ''
 let previousValue = ''
 let selectedOperator = undefined
 
-let validity = false
+let invalid = false
 
 // Functions
 
@@ -22,6 +22,8 @@ function clear() {
     currentValue = ''
     previousValue = ''
     selectedOperator = undefined
+    displayScreen.textContent = ''
+    activeScreen.textContent = ''
 }
 
 function deleteNumber() {
@@ -56,8 +58,8 @@ function handleEqual() {
 }
 
 function updateDisplay() {
-    if(validity) {
-        validity = false
+    if(invalid) {
+        invalid = false
         return
     }
     activeScreen.textContent = currentValue
@@ -99,8 +101,8 @@ function operate(operator, a, b) {
 function isInvalid() {
     if(selectedOperator === '/' && currentValue === '0') {
         alert("That's invalid, you melon")
-        currentValue = ''
-        validity = true
+        clear()
+        invalid = true
         return true
     } else return false
 }
@@ -129,8 +131,6 @@ equalBtn.addEventListener('click', () => {
 
 clearBtn.addEventListener('click', () => {
     clear()
-    updateDisplay()
-    displayScreen.textContent = ''
 })
 
 deleteBtn.addEventListener('click', () => {
