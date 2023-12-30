@@ -1,110 +1,107 @@
 // DOM variables
 
-const numberBtns = document.querySelectorAll('[data-number]');
-const operatorBtns = document.querySelectorAll('[data-operator]');
-const pointBtn = document.querySelector('#pointBtn');
-const equalBtn = document.querySelector('#equalBtn');
-const clearBtn = document.querySelector('#clearBtn');
-const deleteBtn = document.querySelector('#deleteBtn');
-const displayScreen = document.querySelector('#display-screen');
-const activeScreen = document.querySelector('#active-screen');
+const numberBtns = document.querySelectorAll('[data-number]')
+const operatorBtns = document.querySelectorAll('[data-operator]')
+const equalBtn = document.querySelector('#equalBtn')
+const clearBtn = document.querySelector('#clearBtn')
+const deleteBtn = document.querySelector('#deleteBtn')
+const displayScreen = document.querySelector('#display-screen')
+const activeScreen = document.querySelector('#active-screen')
 
 // Initial states
 
-let firstNumber = '';
-let secondNumber = '';
-let selectedOperator = '';
-
-let displayValue = '';
-let activeValue = '';
+let currentValue = ''
+let previousValue = ''
+let selectedOperator = undefined
 
 // Functions
 
-function operate(operator, a, b) {
-    switch (operator) {
-        case '+':
-            return a + b;
-        case '-':
-            return a - b;
-        case 'x':
-            return a * b;
-        case '/':
-            if (b === 0) {
-                alert("That's invalid, you melon");
-                return null;
-            }
-            return a / b;
-        default:
-            return null;
-    }
+function clear() {
+    currentValue = ''
+    previousValue = ''
+    selectedOperator = undefined
 }
 
-function handleNumber(number) {
-    if (activeValue === '' && number == 0) {
-        activeScreen.textContent = 0;
-        return null;
-    } else {
-        activeValue += number;
-        activeScreen.textContent = activeValue;
-        return activeValue;
-    }
+function deleteNumber() {
+
+}
+
+function appendNumber(number) {
+    if (number === '.' && currentValue.includes('.')) return
+    currentValue = currentValue.toString() + number.toString()
 }
 
 function handleOperator(operator) {
-    if (firstNumber === '' && secondNumber === '') {
-        selectedOperator = operator;
-        firstNumber = Number(activeValue);
-        displayValue = `${firstNumber} ${operator} `;
-        activeValue = '';
-    } else if (typeof firstNumber === 'number' && secondNumber === '') {
-        secondNumber = Number(activeValue);
-        displayValue += secondNumber;
-        activeValue = '';
+    if (currentValue === '') return
+    if (previousValue !== '') {
+        operate(selectedOperator, previousValue, currentValue)
     }
-    
-    if (typeof firstNumber === 'number' && typeof secondNumber === 'number') {
-        activeValue = roundAnswer(operate(selectedOperator, firstNumber, secondNumber));
-        if (activeValue === null) {
-            return;
-        } else activeScreen.textContent = activeValue;
-    }
-    
-    if (typeof activeValue === 'number') {
-        selectedOperator = operator;
-        firstNumber = activeValue;
-        secondNumber = '';
-        displayValue = `${firstNumber} ${operator} `;
-        activeValue = '';
-    }
-
-    displayScreen.textContent = displayValue;
+    selectedOperator = operator
+    previousValue = currentValue
+    currentValue = ''
 }
 
-function calculate() {
-    secondNumber = Number(activeValue);
-    activeValue = roundAnswer(operate(selectedOperator, firstNumber, secondNumber));
-
-    if (activeValue === null) {
-        return;
-    } else {
-        displayValue = `${firstNumber} ${selectedOperator} ${secondNumber} =`
-        displayScreen.textContent = displayValue;
-        activeScreen.textContent = activeValue;
-    }
+function updateDisplay() {
+    activeScreen.textContent = currentValue
+    displayScreen.textContent = previousValue
 }
 
-function roundAnswer(number) {
-    return Math.round(number * 1e6) / 1e6;
+
+function operate(operator, a, b) {
+    let operation = 0;
+    a = Number(a)
+    b = Number(b)
+
+    if(isNaN(a) || isNaN(b)) return
+
+    switch (operator) {
+        case '+':
+            operation = a + b
+            break
+        case '-':
+            operation = a - b
+            break
+        case 'x':
+            operation = a * b
+            break
+        case '/':
+            if (b === 0) {
+                alert("That's invalid, you melon")
+                break
+            }
+            operation = a / b
+            break
+        default:
+            return
+    }
+
+    currentValue = operation
+    selectedOperator = undefined
+    previousValue = ''
 }
 
 // Event listeners
 
 numberBtns.forEach(function(button) {
-    button.addEventListener('click', () => handleNumber(button.textContent));
-});
+    button.addEventListener('click', () => {
+        appendNumber(button.textContent)
+        updateDisplay()
+    })
+})
 
 operatorBtns.forEach(function(button) {
-    button.addEventListener('click', () => handleOperator(button.textContent));
-});
+    button.addEventListener('click', () => {
+        handleOperator(button.textContent)
+        updateDisplay()
+    })
+})
 
-equalBtn.addEventListener('click', calculate);
+equalBtn.addEventListener('click', () => {
+    operate(selectedOperator, previousValue, currentValue)
+    updateDisplay()
+})
+
+clearBtn.addEventListener('click', () => {
+    clear()
+    updateDisplay()
+})
