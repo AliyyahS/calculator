@@ -23,7 +23,7 @@ function clear() {
 }
 
 function deleteNumber() {
-
+    currentValue = currentValue.toString().slice(0, -1)
 }
 
 function appendNumber(number) {
@@ -103,5 +103,10 @@ equalBtn.addEventListener('click', () => {
 
 clearBtn.addEventListener('click', () => {
     clear()
+    updateDisplay()
+})
+
+deleteBtn.addEventListener('click', () => {
+    deleteNumber()
     updateDisplay()
 })
