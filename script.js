@@ -39,7 +39,11 @@ function appendNumber(number) {
 }
 
 function handleOperator(operator) {
-    if (currentValue === '') return
+    if (currentValue === '' && displayScreen.textContent === '') return
+    if (currentValue === '' && selectedOperator !== '') {
+        selectedOperator = operator
+        return
+    }
     if (isInvalid()) return
     if (previousValue !== '') {
         operate(selectedOperator, previousValue, currentValue)
